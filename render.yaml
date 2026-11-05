@@ -6,3 +6,6 @@ services:
     buildCommand: echo "Python standard library app"
     startCommand: python server.py
     healthCheckPath: /api/setup-status
+    envVars:
+      - key: INITIAL_ADMIN_KEY
+        generateValue: true

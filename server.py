@@ -428,7 +428,7 @@ class AppHandler(BaseHTTPRequestHandler):
             if path == "/api/setup-status":
                 with db() as conn:
                     has_users = conn.execute("SELECT EXISTS(SELECT 1 FROM users)").fetchone()[0]
-                self.send_json(200, {"needsSetup": not bool(has_users)})
+                self.send_json(200, {"needsSetup": not bool(has_users), "setupKeyRequired": bool(os.environ.get("INITIAL_ADMIN_KEY"))})
                 return
             if path == "/api/session":
                 user = self.need_user()
@@ -482,6 +482,10 @@ class AppHandler(BaseHTTPRequestHandler):
         try:
             payload = self.body_json()
             if path == "/api/setup":
+                initial_admin_key = os.environ.get("INITIAL_ADMIN_KEY", "")
+                if initial_admin_key and not hmac.compare_digest(str(payload.get("setupKey", "")), initial_admin_key):
+                    self.fail(403, "أدخلي رمز الإعداد الموجود في إعدادات خدمة Render.")
+                    return
                 with db() as conn:
                     conn.execute("BEGIN IMMEDIATE")
                     if conn.execute("SELECT EXISTS(SELECT 1 FROM users)").fetchone()[0]:
