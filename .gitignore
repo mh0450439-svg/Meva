@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+private/application.sqlite3
+private/application.sqlite3-shm
+private/application.sqlite3-wal.smoke_data/

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5f7">
+  <title>نتائج التلاميذ والتلميذات | لوحة الأداء</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="authRoot" class="auth-screen" aria-live="polite"></main>
+  <div id="appShell" class="hidden">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"><svg class="brand-symbol" viewBox="0 0 24 24"><path d="M5 9h11a3 3 0 0 1 0 6H9a4 4 0 0 1-4-4V9Z"/><circle cx="17.5" cy="5.5" r="1.5"/></svg></span><div><b>منظومة النتائج</b><small>القياس والتقويم</small></div></div>
+    <div class="nav-label">مساحة العمل</div>
+    <button class="nav-item active" data-view="overview"><span class="nav-icon" data-icon="dashboard"></span> نظرة عامة</button>
+    <button class="nav-item" id="studentsNav" data-view="students"><span class="nav-icon" data-icon="students"></span> <span id="studentsNavLabel">التلميذات</span></button>
+    <button class="nav-item" data-view="cumulative"><span class="nav-icon" data-icon="spreadsheet"></span> السجل التراكمي</button>
+    <button class="nav-item" data-view="subjects"><span class="nav-icon" data-icon="chart"></span> تحليل المواد</button>
+    <button class="nav-item hidden" id="settingsNav" data-view="settings"><span class="nav-icon" data-icon="settings"></span> الإعدادات</button>
+    <div class="side-note"><span class="live-dot"></span><span>نسخة تجريبية<br><small>لا تدخلي بيانات حقيقية</small></span></div>
+    <div class="side-footer">لوحة متابعة التحصيل الدراسي</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div class="breadcrumbs">النتائج <span data-icon="chevronLeft"></span> <b id="crumb">نظرة عامة</b></div><div class="top-actions"><span id="userBadge" class="user-badge"></span><button id="themeBtn" class="icon-button" title="تبديل المظهر" aria-label="تبديل المظهر"></button><button id="logoutBtn" class="logout-button"><span data-icon="logout"></span> خروج</button></div></header>
+    <section class="page-head"><div><div class="eyebrow">لوحة القيادة التعليمية</div><h1 id="pageTitle">صورة واضحة عن الأداء.</h1><p id="pageSub">ملخص النتائج ومؤشرات التحصيل في مكان واحد.</p></div><div class="head-actions"><label class="grade-picker">الصف الدراسي<select id="gradeFilter" aria-label="اختيار الصف الدراسي"></select></label><button id="importStudentBtn" class="secondary-button"><span data-icon="spreadsheet"></span> استيراد Excel</button><input id="excelFile" type="file" accept=".xlsx,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.macroEnabled.12" hidden><button id="addStudentBtn" class="secondary-button"><span data-icon="userPlus"></span> <span id="addStudentText">إضافة تلميذة</span></button><button id="exportBtn" class="primary-button"><span data-icon="download"></span> تصدير النتائج</button></div></section>
+
+    <section id="overviewView">
+      <div class="kpi-grid" id="kpis"></div>
+      <div class="insight-row" id="insights"></div>
+      <div class="analysis-grid">
+        <article class="panel subject-panel"><div class="panel-head"><div><h2>الأداء حسب المادة</h2><p>نسبة النجاح ومتوسط التحصيل</p></div><span class="tiny-badge">9 مواد</span></div><div id="subjectChart" class="subject-chart"></div></article>
+        <article class="panel distribution-panel"><div class="panel-head"><div><h2>التصنيف الشامل</h2><p id="distributionCaption">توزيع التلميذات حسب مستوى الأداء</p></div></div><div id="distribution" class="distribution"></div><div class="legend-note" id="distributionNote">من إجمالي السجلات المسجلة</div></article>
+      </div>
+      <article class="panel table-panel"><div class="panel-head table-title"><div><h2>أبرز النتائج</h2><p>ترتيب تنازلي حسب النسبة الإجمالية</p></div><button class="text-button" data-go="students">عرض الكل <span data-icon="arrowLeft"></span></button></div><div class="table-wrap"><table><thead><tr><th>الاسم والنوع</th><th>التصنيف</th><th>المجموع</th><th>النسبة</th><th></th></tr></thead><tbody id="topStudents"></tbody></table></div></article>
+      <article class="panel support-panel"><div class="panel-head support-head"><div><h2 id="supportTitle">التلميذات اللاتي يحتجن إلى دعم</h2><p>متابعة حسب مواد الضعف ونوع خطة الدعم</p></div><span id="supportSummary" class="tiny-badge"></span></div><div id="supportLists" class="support-lists"></div></article>
+    </section>
+
+    <section id="studentsView" class="hidden">
+      <div class="panel directory-panel"><div class="directory-head"><div><h2 id="directoryTitle">دليل التلميذات</h2><p id="studentCount"></p></div><div class="filters"><label class="search-box"><span data-icon="search"></span><input id="searchInput" type="search" placeholder="ابحثي بالاسم أو المعرّف" autocomplete="off"></label><label class="filter-select"><span data-icon="sliders"></span><select id="categoryFilter" aria-label="تصفية حسب التصنيف"><option value="">كل التصنيفات</option></select></label></div></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>النوع</th><th>المعرّف</th><th>التصنيف الشامل</th><th>مواد الضعف</th><th>المجموع</th><th>النسبة</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div><div id="emptyState" class="empty-state hidden">لا توجد نتائج مطابقة. جرّب اسمًا آخر.</div></div>
+    </section>
+
+    <section id="cumulativeView" class="hidden">
+      <article class="panel cumulative-panel">
+        <div class="directory-head cumulative-head"><div><h2>السجل التراكمي للصف السادس</h2><p id="cumulativeCount">بيانات الصفين كما وردت في مصنفي Excel</p></div><div class="filters cumulative-filters"><label class="search-box"><span data-icon="search"></span><input id="cumulativeSearch" type="search" placeholder="ابحث بالاسم أو رقم الهاتف أو المدرسة السابقة" autocomplete="off"></label><label class="filter-select"><span data-icon="sliders"></span><select id="cumulativeGenderFilter" aria-label="تصفية حسب النوع"><option value="">الكل</option><option value="male">التلاميذ</option><option value="female">التلميذات</option></select></label><button id="cumulativeExport" type="button" class="secondary-button"><span data-icon="download"></span> تصدير CSV</button></div></div>
+        <div class="cumulative-layout">
+          <div class="cumulative-list-panel"><div class="table-wrap cumulative-list-wrap"><table class="cumulative-table"><thead><tr><th>الرقم</th><th>الاسم</th><th>النوع</th><th>الهاتف</th><th>المجموع السابق</th><th>المدرسة السابقة</th></tr></thead><tbody id="cumulativeRows"></tbody></table></div><div id="cumulativeEmpty" class="empty-state hidden">لا توجد سجلات مطابقة.</div></div>
+          <form id="cumulativeForm" class="cumulative-form" autocomplete="off">
+            <div class="cumulative-form-head"><div><div class="profile-kicker">بيانات التلميذ / التلميذة</div><h3 id="cumulativeFormTitle">اختاري سجلًا أو أضيفي جديدًا</h3></div><button type="button" id="cumulativeNew" class="secondary-button"><span data-icon="plus"></span> سجل جديد</button></div>
+            <input id="cumulativeId" type="hidden"><div class="cumulative-fields">
+              <label class="form-field">رقم السجل<input id="cumStudentIndex" type="number" required min="1" max="10000" step="1"></label>
+              <label class="form-field">الاسم الكامل<input id="cumName" required maxlength="100"></label>
+              <label class="form-field">النوع<select id="cumGender"><option value="male">تلميذ</option><option value="female">تلميذة</option></select></label>
+              <label class="form-field">الصف الدراسي<input id="cumGrade" value="الصف السادس" maxlength="80"></label>
+              <label class="form-field">رقم الاتصال<input id="cumPhone" inputmode="tel" maxlength="40"></label>
+              <label class="form-field">رقم واتساب<input id="cumWhatsapp" inputmode="tel" maxlength="40"></label>
+              <label class="form-field">المجموع السابق<input id="cumPreviousTotal" maxlength="120" placeholder="كما ورد في السجل السابق"></label>
+              <label class="form-field">المدرسة السابقة<input id="cumPreviousSchool" maxlength="160"></label>
+              <label class="form-field">مهنة الأب<input id="cumFatherOccupation" maxlength="120"></label>
+              <label class="form-field">اسم الأم<input id="cumMotherName" maxlength="120"></label>
+              <label class="form-field">مهنة الأم<input id="cumMotherOccupation" maxlength="120"></label>
+              <label class="form-field">العنوان<input id="cumAddress" maxlength="200"></label>
+              <label class="form-field">وسيلة النقل<input id="cumTransport" maxlength="120"></label>
+            </div>
+            <div class="cumulative-terms"><div class="subject-admin-head"><div><h3>السجل الدراسي</h3><p>الأعمدة الأربعة مطابقة للفصول في ملف Excel.</p></div></div><div class="cumulative-fields terms-fields"><label class="form-field">الفصل الأول<input id="cumTerm1" maxlength="60"></label><label class="form-field">الفصل الثاني<input id="cumTerm2" maxlength="60"></label><label class="form-field">الفصل الثالث<input id="cumTerm3" maxlength="60"></label><label class="form-field">الفصل الرابع<input id="cumTerm4" maxlength="60"></label></div></div>
+            <div id="cumulativeMessage" class="form-error" role="status"></div>
+            <div class="form-actions cumulative-actions"><button id="cumulativeDelete" type="button" class="delete-button hidden"><span data-icon="trash"></span> حذف السجل</button><span class="cumulative-source" id="cumulativeSource"></span><button id="cumulativeSave" type="submit" class="primary-button"><span data-icon="save"></span> حفظ السجل</button></div>
+          </form>
+        </div>
+      </article>
+    </section>
+
+    <section id="subjectsView" class="hidden">
+      <div class="panel directory-panel"><div class="panel-head"><div><h2>مقارنة المواد الدراسية</h2><p>مؤشرات فعلية مستخرجة من سجل النتائج</p></div></div><div id="subjectDetails" class="subject-details"></div></div>
+    </section>
+    <section id="studentDetailView" class="hidden">
+      <div class="detail-toolbar"><button id="detailBackBtn" class="secondary-button"><span data-icon="arrowLeft"></span> العودة للقائمة</button><span id="detailGrade" class="tiny-badge"></span></div>
+      <article class="panel student-detail-card"><div class="student-detail-heading"><div class="avatar" id="detailAvatar">ت</div><div><div class="profile-kicker" id="detailProfileKicker">ملف التلميذة والنتائج</div><h2 id="detailName"></h2><span id="detailId" class="profile-id"></span><span id="detailGender" class="tiny-badge"></span></div><div id="detailCategory"></div></div>
+        <div id="detailStats" class="profile-stats"></div>
+        <div class="support-note hidden" id="detailSupport"></div>
+        <div class="panel-head detail-results-head"><div><h3>الدرجات حسب المادة</h3><p>الدرجة والحدود التصنيفية والنتيجة في كل مادة</p></div></div>
+        <div class="table-wrap"><table class="results-table"><thead><tr><th>المادة</th><th>الدرجة</th><th>النهاية العظمى</th><th>نسبة التحصيل</th><th>التقدير</th></tr></thead><tbody id="detailResults"></tbody></table></div>
+      </article>
+    </section>
+    <section id="settingsView" class="hidden">
+      <div class="panel directory-panel grade-admin-panel"><div class="directory-head"><div><h2>الصفوف والمواد الدراسية</h2><p>لكل صف قائمته المستقلة من المواد وحدود الدرجات</p></div></div><div class="grade-admin-toolbar"><label class="form-field">الصف المحدد<select id="gradeAdminSelect"></select></label><form id="gradeCreateForm" class="inline-grade-form"><label class="form-field">إضافة صف دراسي<input id="newGradeName" required maxlength="80" placeholder="مثال: الصف السادس"></label><button class="secondary-button" type="submit"><span data-icon="plus"></span> إضافة صف</button></form></div><div class="subject-admin-head"><div><h3 id="subjectAdminTitle">مواد الصف</h3><p>أدخلي النهاية العظمى كدرجة، وحدود التصنيف كنسب مئوية منها. إزالة المادة تخفيها عن التحليل مع إبقاء الدرجات المحفوظة.</p></div><span id="subjectAdminCount" class="tiny-badge"></span></div><div id="gradeAdminError" class="form-error" role="alert"></div><div id="subjectAdminRows" class="subject-admin-list"></div><form id="subjectCreateForm" class="subject-create-form"><label class="form-field">اسم المادة<input id="newSubjectName" required maxlength="80" placeholder="اسم المادة"></label><label class="form-field">النهاية العظمى (درجة)<input id="newSubjectMax" type="number" required min="1" max="1000" step="0.5" value="100"></label><label class="form-field">حد النجاح (%)<input id="newSubjectPass" type="number" required min="0" max="100" step="0.1" value="50"></label><label class="form-field">حد الضعف (%)<input id="newSubjectWeak" type="number" required min="0" max="100" step="0.1" value="60"></label><label class="form-field">حد التميز (%)<input id="newSubjectExcellent" type="number" required min="0" max="100" step="0.1" value="90"></label><button type="submit" class="primary-button"><span data-icon="plus"></span> إضافة مادة</button></form></div>
+      <div class="panel directory-panel"><div class="directory-head"><div><h2>المستخدمون والصلاحيات</h2><p>إدارة الحسابات والأدوار داخل التطبيق</p></div><button id="addUserBtn" class="primary-button"><span data-icon="userPlus"></span> إضافة مستخدم</button></div><div class="role-cards"><article><b>مشرف النظام</b><span>إدارة المستخدمين وجميع سجلات التلاميذ والتلميذات</span></article><article><b>مشرف</b><span>إضافة السجلات واستيرادها وحذفها</span></article><article><b>مستخدم للعرض</b><span>استعراض المؤشرات والبطاقات دون تعديل</span></article></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>اسم المستخدم</th><th>الدور</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="userRows"></tbody></table></div></div>
+    </section>
+    <footer class="app-footer">تم إعداد العرض اعتمادًا على بيانات المصنف • <span id="footerCount"></span> <span id="footerNoun">تلميذة</span> • نسخة تجريبية</footer>
+  </main>
+
+  <div id="addModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="addTitle"><button class="scrim" data-close-add aria-label="إغلاق"></button><form id="addForm" class="student-card add-form"><button type="button" class="close-button" data-close-add aria-label="إغلاق"><span data-icon="close"></span></button><div class="profile-kicker">سجل جديد</div><h2 id="addTitle">إضافة تلميذة</h2><p class="form-intro">أدخلي الاسم والنوع والدرجات. ضعي علامة غائبة عند عدم حضور المادة.</p><label id="newNameLabel" class="form-field">اسم التلميذة<input id="newName" name="name" required maxlength="100" autocomplete="off" placeholder="الاسم الكامل"></label><label class="form-field">النوع<select id="newGender" name="gender" required><option value="female">تلميذة</option><option value="male">تلميذ</option></select></label><label class="form-field">المعرّف الفريد<input id="newId" name="id" readonly></label><div class="grade-form-head"><b>الدرجات</b><span>الحد الأعلى موضح لكل مادة</span></div><div id="gradeInputs" class="grade-inputs"></div><div id="formError" class="form-error" role="alert"></div><div class="form-actions"><button type="button" class="secondary-button" data-close-add>إلغاء</button><button type="submit" class="primary-button"><span data-icon="save"></span> حفظ السجل</button></div><p class="storage-note">يُحفظ السجل في خادم نسخة التجربة. استخدمي بيانات اصطناعية فقط.</p></form></div>
+  <div id="importModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="importTitle"><button class="scrim" data-close-import aria-label="إغلاق"></button><article class="student-card import-card"><button type="button" class="close-button" data-close-import aria-label="إغلاق"><span data-icon="close"></span></button><div class="profile-kicker">استيراد تجريبي</div><h2 id="importTitle">مراجعة بيانات Excel</h2><p id="importFileName" class="form-intro"></p><div id="importSummary" class="import-summary"></div><p class="storage-note">تُقرأ محتويات الملف محليًا، ثم تُرسل السجلات المعتمدة إلى خادم نسخة التجربة. استخدمي بيانات اصطناعية فقط.</p><div class="form-error" id="importError" role="alert"></div><div class="form-actions"><button type="button" class="secondary-button" data-close-import>إلغاء</button><button id="applyImportBtn" type="button" class="primary-button"><span data-icon="check"></span> اعتماد الاستيراد</button></div></article></div>
+  <div id="userModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="userTitle"><button class="scrim" data-close-user aria-label="إغلاق"></button><form id="userForm" class="student-card user-form"><button type="button" class="close-button" data-close-user aria-label="إغلاق"><span data-icon="close"></span></button><div class="profile-kicker">إعدادات النظام</div><h2 id="userTitle">إضافة مستخدم</h2><p class="form-intro">اختاري دور الحساب وكلمة مرور بطول 12 حرفًا على الأقل.</p><label class="form-field">الاسم الظاهر<input id="userDisplayName" required maxlength="100" autocomplete="name"></label><label class="form-field">اسم المستخدم<input id="userName" required minlength="3" maxlength="40" pattern="[A-Za-z0-9_.-]+" autocomplete="off"></label><label class="form-field">الدور<select id="userRole" required><option value="supervisor">مشرف</option><option value="admin">مشرف النظام</option><option value="viewer">مستخدم للعرض</option></select></label><label class="form-field">كلمة المرور<input id="userPassword" type="password" required minlength="12" autocomplete="new-password"></label><div id="userError" class="form-error" role="alert"></div><div class="form-actions"><button type="button" class="secondary-button" data-close-user>إلغاء</button><button type="submit" class="primary-button"><span data-icon="userPlus"></span> إنشاء الحساب</button></div><p class="storage-note">تُخزّن كلمة المرور على شكل تجزئة آمنة ولا تظهر في قائمة المستخدمين.</p></form></div>
+  </div>
+  <script src="icons.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>
