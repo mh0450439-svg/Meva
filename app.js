@@ -350,7 +350,7 @@
   $('#addUserBtn').addEventListener('click',openUserModal);
   $('#userForm').addEventListener('submit',async e=>{
     e.preventDefault();const form=e.currentTarget,f=new FormData(form),button=form.querySelector('button[type=submit]');button.disabled=true;$('#userError').textContent='';
-    try{await window.APP_API('/api/users',{method:'POST',body:JSON.stringify({displayName:f.get('displayName').trim(),username:f.get('username').trim(),role:f.get('role'),password:f.get('password')})});form.reset();closeUserModal();await renderUsers();}
+    try{await window.APP_API('/api/users',{method:'POST',body:JSON.stringify({displayName:String(f.get('displayName')||'').trim(),username:String(f.get('username')||'').trim(),role:f.get('role'),password:f.get('password')})});form.reset();closeUserModal();await renderUsers();}
     catch(err){$('#userError').textContent=err.message||'تعذر إنشاء الحساب.';}
     finally{button.disabled=false;}
   });
