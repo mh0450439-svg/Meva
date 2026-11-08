@@ -28,6 +28,8 @@
     close: '<path d="m18 6-12 12M6 6l12 12"/>',
     check: '<path d="m5 12 4 4L19 6"/>',
     filter: '<path d="M4 7h16M7 12h10m-7 5h4"/><circle cx="8" cy="7" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/>',
+    compare: '<path d="M4 19V5m0 14h16"/><path d="M7 15l4-4 3 2 5-7"/><path d="M16 6h3v3"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/>',
   };
   window.APP_ICON = (name, size = 20, className = '') => `<svg class="ui-icon ${className}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[name] || paths.alert}</svg>`;
 })();
